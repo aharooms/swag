@@ -104,7 +104,7 @@ func SetMarkdownFileDirectory(directoryPath string) func(*Parser) {
 }
 
 // ParseAPI parses general api info for given searchDir and mainAPIFile
-func (parser *Parser) ParseAPI(searchDir string, mainAPIFile string) error {
+func (parser *Parser) ParseAPI(searchDir string, mainAPIFile string, parseDir []string) error {
 	Printf("Generate general API Info, search dir:%s", searchDir)
 
 	if err := parser.getAllGoFileInfo(searchDir); err != nil {
@@ -142,12 +142,31 @@ func (parser *Parser) ParseAPI(searchDir string, mainAPIFile string) error {
 	}
 
 	for fileName, astFile := range parser.files {
+		if len(parseDir) > 0 && !containsStringInList(fileName, parseDir) {
+			continue
+		}
+
 		if err := parser.ParseRouterAPIInfo(fileName, astFile); err != nil {
 			return err
 		}
 	}
 
 	return parser.parseDefinitions()
+}
+
+func containsStringInList(val string, lst []string) bool {
+	if len(lst) <= 0 {
+		return false
+	}
+
+	for idx := range lst {
+		itm := lst[idx]
+		if strings.Contains(val, itm) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func getPkgName(searchDir string) (string, error) {

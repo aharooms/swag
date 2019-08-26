@@ -909,7 +909,7 @@ func TestParseSimpleApi1(t *testing.T) {
 	mainAPIFile := "main.go"
 	p := New()
 	p.PropNamingStrategy = PascalCase
-	err := p.ParseAPI(searchDir, mainAPIFile)
+	err := p.ParseAPI(searchDir, mainAPIFile, "")
 	assert.NoError(t, err)
 
 	b, _ := json.MarshalIndent(p.swagger, "", "    ")
@@ -1393,7 +1393,7 @@ func TestParseSimpleApi_ForSnakecase(t *testing.T) {
 	mainAPIFile := "main.go"
 	p := New()
 	p.PropNamingStrategy = SnakeCase
-	err := p.ParseAPI(searchDir, mainAPIFile)
+	err := p.ParseAPI(searchDir, mainAPIFile, "")
 	assert.NoError(t, err)
 
 	b, _ := json.MarshalIndent(p.swagger, "", "    ")
@@ -1849,7 +1849,7 @@ func TestParseSimpleApi_ForLowerCamelcase(t *testing.T) {
 	searchDir := "testdata/simple3"
 	mainAPIFile := "main.go"
 	p := New()
-	err := p.ParseAPI(searchDir, mainAPIFile)
+	err := p.ParseAPI(searchDir, mainAPIFile, "")
 	assert.NoError(t, err)
 
 	b, _ := json.MarshalIndent(p.swagger, "", "    ")
@@ -1967,7 +1967,7 @@ func TestParseStructComment(t *testing.T) {
 	searchDir := "testdata/struct_comment"
 	mainAPIFile := "main.go"
 	p := New()
-	err := p.ParseAPI(searchDir, mainAPIFile)
+	err := p.ParseAPI(searchDir, mainAPIFile, "")
 	assert.NoError(t, err)
 	b, _ := json.MarshalIndent(p.swagger, "", "    ")
 	assert.Equal(t, expected, string(b))
@@ -2000,7 +2000,7 @@ func TestParsePetApi(t *testing.T) {
 	searchDir := "testdata/pet"
 	mainAPIFile := "main.go"
 	p := New()
-	err := p.ParseAPI(searchDir, mainAPIFile)
+	err := p.ParseAPI(searchDir, mainAPIFile, "")
 	assert.NoError(t, err)
 	b, _ := json.MarshalIndent(p.swagger, "", "    ")
 	assert.Equal(t, expected, string(b))
@@ -2153,7 +2153,7 @@ func TestParseModelNotUnderRoot(t *testing.T) {
 	searchDir := "testdata/model_not_under_root/cmd"
 	mainAPIFile := "main.go"
 	p := New()
-	err := p.ParseAPI(searchDir, mainAPIFile)
+	err := p.ParseAPI(searchDir, mainAPIFile, "")
 	assert.NoError(t, err)
 	b, _ := json.MarshalIndent(p.swagger, "", "    ")
 	assert.Equal(t, expected, string(b))
@@ -2222,7 +2222,7 @@ func TestParseModelAsTypeAlias(t *testing.T) {
 	searchDir := "testdata/alias_type"
 	mainAPIFile := "main.go"
 	p := New()
-	err := p.ParseAPI(searchDir, mainAPIFile)
+	err := p.ParseAPI(searchDir, mainAPIFile, "")
 	assert.NoError(t, err)
 
 	b, _ := json.MarshalIndent(p.swagger, "", "    ")
@@ -2233,7 +2233,7 @@ func TestParseComposition(t *testing.T) {
 	searchDir := "testdata/composition"
 	mainAPIFile := "main.go"
 	p := New()
-	err := p.ParseAPI(searchDir, mainAPIFile)
+	err := p.ParseAPI(searchDir, mainAPIFile, "")
 	assert.NoError(t, err)
 
 	expected, err := ioutil.ReadFile(path.Join(searchDir, "expected.json"))
@@ -2652,7 +2652,7 @@ func TestSkipMustParseVendor(t *testing.T) {
 // 			for i := 0; i < 100; i++ {
 // 				p := New()
 // 				p.PropNamingStrategy = PascalCase
-// 				err := p.ParseAPI(searchDir, mainAPIFile)
+// 				err := p.ParseAPI(searchDir, mainAPIFile, "")
 // 				b, _ := json.MarshalIndent(p.swagger, "", "    ")
 // 				assert.NotEqual(t, "", string(b))
 
@@ -2671,7 +2671,7 @@ func TestApiParseTag(t *testing.T) {
 	mainAPIFile := "main.go"
 	p := New(SetMarkdownFileDirectory(searchDir))
 	p.PropNamingStrategy = PascalCase
-	err := p.ParseAPI(searchDir, mainAPIFile)
+	err := p.ParseAPI(searchDir, mainAPIFile, "")
 	assert.NoError(t, err)
 
 	if len(p.swagger.Tags) != 3 {
@@ -2700,7 +2700,7 @@ func TestParseTagMarkdownDescription(t *testing.T) {
 	mainAPIFile := "main.go"
 	p := New(SetMarkdownFileDirectory(searchDir))
 	p.PropNamingStrategy = PascalCase
-	err := p.ParseAPI(searchDir, mainAPIFile)
+	err := p.ParseAPI(searchDir, mainAPIFile, "")
 	if err != nil {
 		t.Error("Failed to parse api description: " + err.Error())
 	}
@@ -2720,7 +2720,7 @@ func TestParseApiMarkdownDescription(t *testing.T) {
 	mainAPIFile := "main.go"
 	p := New(SetMarkdownFileDirectory(searchDir))
 	p.PropNamingStrategy = PascalCase
-	err := p.ParseAPI(searchDir, mainAPIFile)
+	err := p.ParseAPI(searchDir, mainAPIFile, "")
 	if err != nil {
 		t.Error("Failed to parse api description: " + err.Error())
 	}
@@ -2734,7 +2734,7 @@ func TestIgnoreInvalidPkg(t *testing.T) {
 	searchDir := "testdata/deps_having_invalid_pkg"
 	mainAPIFile := "main.go"
 	p := New()
-	if err := p.ParseAPI(searchDir, mainAPIFile); err != nil {
+	if err := p.ParseAPI(searchDir, mainAPIFile, ""); err != nil {
 		t.Error("Failed to ignore valid pkg: " + err.Error())
 	}
 }
@@ -2744,7 +2744,7 @@ func TestFixes432(t *testing.T) {
 	mainAPIFile := "cmd/main.go"
 
 	p := New()
-	if err := p.ParseAPI(searchDir, mainAPIFile); err != nil {
+	if err := p.ParseAPI(searchDir, mainAPIFile, ""); err != nil {
 		t.Error("Failed to ignore valid pkg: " + err.Error())
 	}
 }
@@ -2755,7 +2755,7 @@ func TestParseOutsideDependencies(t *testing.T) {
 
 	p := New()
 	p.ParseDependency = true
-	if err := p.ParseAPI(searchDir, mainAPIFile); err != nil {
+	if err := p.ParseAPI(searchDir, mainAPIFile, ""); err != nil {
 		t.Error("Failed to parse api: " + err.Error())
 	}
 }

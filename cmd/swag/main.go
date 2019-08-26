@@ -11,6 +11,7 @@ import (
 )
 
 const searchDirFlag = "dir"
+const parseDirFlag = "pdir"
 const generalInfoFlag = "generalInfo"
 const propertyStrategyFlag = "propertyStrategy"
 const outputFlag = "output"
@@ -21,7 +22,8 @@ const markdownFilesDirFlag = "markdownFiles"
 func main() {
 	app := cli.NewApp()
 	app.Version = swag.Version
-	app.Usage = "Automatically generate RESTful API documentation with Swagger 2.0 for Go."
+	tempSlice := cli.StringSlice([]string{})
+	app.Usage = "Automatically generate RESTful API documentation with Swagger 2.0 for Go. -HP"
 	app.Commands = []cli.Command{
 		{
 			Name:    "init",
@@ -29,6 +31,7 @@ func main() {
 			Usage:   "Create docs.go",
 			Action: func(c *cli.Context) error {
 				searchDir := c.String(searchDirFlag)
+				parseDir := c.StringSlice(parseDirFlag)
 				mainAPIFile := c.String(generalInfoFlag)
 				strategy := c.String(propertyStrategyFlag)
 				outputDir := c.String(outputFlag)
@@ -44,6 +47,7 @@ func main() {
 
 				return gen.New().Build(&gen.Config{
 					SearchDir:          searchDir,
+					ParseDir:           parseDir,
 					MainAPIFile:        mainAPIFile,
 					PropNamingStrategy: strategy,
 					OutputDir:          outputDir,
@@ -61,7 +65,12 @@ func main() {
 				cli.StringFlag{
 					Name:  "dir, d",
 					Value: "./",
-					Usage: "Directory you want to parse",
+					Usage: "Root directory you want to parse",
+				},
+				cli.StringSliceFlag{
+					Name:  "pdir, pd",
+					Value: &tempSlice,
+					Usage: "Directory you want to parse ",
 				},
 				cli.StringFlag{
 					Name:  "propertyStrategy, p",

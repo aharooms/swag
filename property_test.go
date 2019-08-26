@@ -299,7 +299,7 @@ func TestParseTag(t *testing.T) {
 	mainAPIFile := "main.go"
 	p := New(SetMarkdownFileDirectory(searchDir))
 	p.PropNamingStrategy = PascalCase
-	err := p.ParseAPI(searchDir, mainAPIFile)
+	err := p.ParseAPI(searchDir, mainAPIFile, "")
 	assert.NoError(t, err)
 
 	if len(p.swagger.Tags) != 3 {
