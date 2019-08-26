@@ -32,6 +32,9 @@ type Config struct {
 	// SearchDir the swag would be parse
 	SearchDir string
 
+	// ParseDir the swag would be parse content
+	ParseDir []string
+
 	// OutputDir represents the output directory for al the generated files
 	OutputDir string
 
@@ -63,7 +66,7 @@ func (g *Gen) Build(config *Config) error {
 	p.ParseVendor = config.ParseVendor
 	p.ParseDependency = config.ParseDependency
 
-	if err := p.ParseAPI(config.SearchDir, config.MainAPIFile); err != nil {
+	if err := p.ParseAPI(config.SearchDir, config.MainAPIFile, config.ParseDir); err != nil {
 		return err
 	}
 	swagger := p.GetSwagger()
