@@ -231,7 +231,7 @@ import (
 	"strings"
 
 	"github.com/alecthomas/template"
-	"github.com/swaggo/swag"
+	// "github.com/swaggo/swag"
 )
 
 var doc = ` + "`{{ printDoc .Doc}}`" + `
@@ -255,9 +255,10 @@ var SwaggerInfo = swaggerInfo{
 	Description: {{ printf "%q" .Description}},
 }
 
-type s struct{}
+// S swagger document implement
+type S struct{}
 
-func (s *s) ReadDoc() string {
+func (s *S) ReadDoc() string {
 	sInfo := SwaggerInfo
 	sInfo.Description = strings.Replace(sInfo.Description, "\n", "\\n", -1)
 
@@ -280,6 +281,6 @@ func (s *s) ReadDoc() string {
 }
 
 func init() {
-	swag.Register(swag.Name, &s{})
+	// swag.Register(swag.Name, &s{})
 }
 `
