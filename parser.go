@@ -1053,7 +1053,7 @@ func (parser *Parser) parseField(field *ast.Field) (*structField, error) {
 	case CamelCase:
 		structField.name = toLowerCamelCase(structField.name)
 	default:
-		structField.name = toLowerCamelCase(structField.name)
+		structField.name = structField.name
 	}
 
 	if field.Tag == nil {

@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/alecthomas/template"
-	"github.com/swaggo/swag"
 )
 
 var doc = `{
@@ -265,9 +264,9 @@ var SwaggerInfo = swaggerInfo{
 	Description: "# General API documentation\n\n**Warning** this api is not production ready. Use at your own risk.\n\nIn order to re-generate the documentation you need to run\n\n`swago init --md .`",
 }
 
-type s struct{}
+type S struct{}
 
-func (s *s) ReadDoc() string {
+func (s *S) ReadDoc() string {
 	sInfo := SwaggerInfo
 	sInfo.Description = strings.Replace(sInfo.Description, "\n", "\\n", -1)
 
@@ -290,5 +289,5 @@ func (s *s) ReadDoc() string {
 }
 
 func init() {
-	swag.Register(swag.Name, &s{})
+	// swag.Register(swag.Name, &s{})
 }
